@@ -34,8 +34,6 @@ describe('Angulartics2KeenIO', () => {
   it('should set collection',
     fakeAsync(inject([Location, Angulartics2, Angulartics2KeenIO],
         (location: Location, angulartics2: Angulartics2, angulartics2KeenIO: Angulartics2KeenIO) => {
-          fixture = createRoot(RootCmp);
-          advance(fixture);
           angulartics2KeenIO.setCollection('testCollection');
           expect(angulartics2KeenIO.collection).toEqual('testCollection');
       })));
@@ -43,8 +41,6 @@ describe('Angulartics2KeenIO', () => {
   it('should set client',
     fakeAsync(inject([Location, Angulartics2, Angulartics2KeenIO],
         (location: Location, angulartics2: Angulartics2, angulartics2KeenIO: Angulartics2KeenIO) => {
-          fixture = createRoot(RootCmp);
-          advance(fixture);
           angulartics2KeenIO.setClient(client);
           expect(angulartics2KeenIO.client).toEqual(client);
       })));
@@ -52,15 +48,15 @@ describe('Angulartics2KeenIO', () => {
   it('should track initial page',
     fakeAsync(inject([Location, Angulartics2, Angulartics2KeenIO],
         (location: Location, angulartics2: Angulartics2, angulartics2KeenIO: Angulartics2KeenIO) => {
-          fixture = createRoot(RootCmp);
-          advance(fixture);
-
           angulartics2KeenIO.setClient(client);
           angulartics2KeenIO.setCollection('testCollection');
+
+          fixture = createRoot(RootCmp);
+          advance(fixture);
           expect(client.addEvent).toHaveBeenCalledWith('testCollection', {
             event: 'pageview',
             path: '',
-            location: ''
+            location: location
           });
       })));
 
@@ -70,7 +66,14 @@ describe('Angulartics2KeenIO', () => {
   //         fixture = createRoot(RootCmp);
   //         angulartics2.pageTrack.next({ path: '/abc', location: location });
   //         advance(fixture);
-  //         expect(client.track).toHaveBeenCalledWith('Page Viewed', { page: '/abc' });
+  //
+  //         angulartics2KeenIO.setClient(client);
+  //         angulartics2KeenIO.setCollection('testCollection');
+  //         expect(client.addEvent).toHaveBeenCalledWith('testCollection', {
+  //           event: 'pageview',
+  //           path: '/abc',
+  //           location: location
+  //         });
   //     })));
   //
   // it('should track events',
@@ -79,37 +82,15 @@ describe('Angulartics2KeenIO', () => {
   //         fixture = createRoot(RootCmp);
   //         angulartics2.eventTrack.next({ action: 'do', properties: { category: 'cat' } });
   //         advance(fixture);
-  //         expect(client.track).toHaveBeenCalledWith('do', { category: 'cat' });
+  //
+  //         angulartics2KeenIO.setClient(client);
+  //         angulartics2KeenIO.setCollection('testCollection');
+  //         expect(client.addEvent).toHaveBeenCalledWith('testCollection', {
+  //           event: 'do',
+  //           category: 'cat'
+  //         });
   //     })));
-  //
-  //
-  // it('should set username',
-  //   fakeAsync(inject([Location, Angulartics2, Angulartics2KeenIO],
-  //       (location: Location, angulartics2: Angulartics2, angulartics2KeenIO: Angulartics2KeenIO) => {
-  //         fixture = createRoot(RootCmp);
-  //         angulartics2.setUsername.next('testUser');
-  //         advance(fixture);
-  //         expect(client.identify).toHaveBeenCalledWith('testUser');
-  //     })));
-  //
-  // it('should set user properties',
-  //   fakeAsync(inject([Location, Angulartics2, Angulartics2KeenIO],
-  //       (location: Location, angulartics2: Angulartics2, angulartics2KeenIO: Angulartics2KeenIO) => {
-  //         fixture = createRoot(RootCmp);
-  //         angulartics2.setUserProperties.next({ userId: '1', firstName: 'John', lastName: 'Doe' });
-  //         advance(fixture);
-  //         expect(client.people.set).toHaveBeenCalledWith({ userId: '1', firstName: 'John', lastName: 'Doe' });
-  //     })));
-  //
-  // it('should set user properties once',
-  //   fakeAsync(inject([Location, Angulartics2, Angulartics2KeenIO],
-  //       (location: Location, angulartics2: Angulartics2, angulartics2KeenIO: Angulartics2KeenIO) => {
-  //         fixture = createRoot(RootCmp);
-  //         angulartics2.setUserPropertiesOnce.next({ userId: '1', firstName: 'John', lastName: 'Doe' });
-  //         advance(fixture);
-  //         expect(client.people.set_once).toHaveBeenCalledWith({ userId: '1', firstName: 'John', lastName: 'Doe' });
-  //     })));
-  //
+
   // it('should set super properties',
   //   fakeAsync(inject([Location, Angulartics2, Angulartics2KeenIO],
   //       (location: Location, angulartics2: Angulartics2, angulartics2KeenIO: Angulartics2KeenIO) => {
@@ -117,24 +98,6 @@ describe('Angulartics2KeenIO', () => {
   //         angulartics2.setSuperProperties.next({ userId: '1', firstName: 'John', lastName: 'Doe' });
   //         advance(fixture);
   //         expect(client.register).toHaveBeenCalledWith({ userId: '1', firstName: 'John', lastName: 'Doe' });
-  //     })));
-  //
-  // it('should set super properties once',
-  //   fakeAsync(inject([Location, Angulartics2, Angulartics2KeenIO],
-  //       (location: Location, angulartics2: Angulartics2, angulartics2KeenIO: Angulartics2KeenIO) => {
-  //         fixture = createRoot(RootCmp);
-  //         angulartics2.setSuperPropertiesOnce.next({ userId: '1', firstName: 'John', lastName: 'Doe' });
-  //         advance(fixture);
-  //         expect(client.register_once).toHaveBeenCalledWith({ userId: '1', firstName: 'John', lastName: 'Doe' });
-  //     })));
-  //
-  // it('should set alias',
-  //   fakeAsync(inject([Location, Angulartics2, Angulartics2KeenIO],
-  //       (location: Location, angulartics2: Angulartics2, angulartics2KeenIO: Angulartics2KeenIO) => {
-  //         fixture = createRoot(RootCmp);
-  //         angulartics2.setAlias.next('testAlias');
-  //         advance(fixture);
-  //         expect(client.alias).toHaveBeenCalledWith('testAlias');
   //     })));
 
 });
